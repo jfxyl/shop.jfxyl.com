@@ -59,7 +59,7 @@ class Category extends Model
         return $this->ancestors
             ->pluck('name')
             ->push($this->name)
-            ->implode('-');
+            ->implode(' - ');
     }
 
 }
