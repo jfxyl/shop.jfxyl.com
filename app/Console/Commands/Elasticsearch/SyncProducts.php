@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Elasticsearch;
 
-use App\Models\product;
+use App\Models\Product;
 use Illuminate\Console\Command;
 
 class SyncProducts extends Command
