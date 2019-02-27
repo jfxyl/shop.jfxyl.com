@@ -138,7 +138,6 @@ class ProductSearchBuilder
     // 返回构造好的查询参数
     public function getParams()
     {
-        dd($this->params);
         return $this->params;
     }
 }
