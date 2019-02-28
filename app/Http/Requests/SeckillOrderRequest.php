@@ -25,9 +25,17 @@ class SeckillOrderRequest extends Request
             'sku_id' => [
                 'required',
                 function($attribute,$value,$fail){
-                    if(!$sku = ProductSku::find($value)){
-                        return $fail('商品不存在');
+                    // 从 Redis 中读取数据
+                    $stock = \Redis::get('seckill_sku_'.$value);
+                    // 如果是 null 代表这个 SKU 不是秒杀商品
+                    if (is_null($stock)) {
+                        return $fail('该商品不存在');
                     }
+                    // 判断库存
+                    if ($stock < 1) {
+                        return $fail('该商品已售完');
+                    }
+                    $sku = ProductSku::find($value);
                     if($sku->product->type !== Product::TYPE_SECKILL){
                         return $fail('商品未参与秒杀活动');
                     }
@@ -36,12 +44,6 @@ class SeckillOrderRequest extends Request
                     }
                     if($sku->product->seckill->is_after_end){
                         return $fail('秒杀已结束');
-                    }
-                    if(!$sku->product->on_sale){
-                        return $fail('该商品未上架');
-                    }
-                    if($sku->stock < 1) {
-                        return $fail('该商品已售完');
                     }
                     if($order = Order::query()
                         ->where('user_id',$this->user()->id)

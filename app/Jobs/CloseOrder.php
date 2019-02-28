@@ -40,6 +40,12 @@ class CloseOrder implements ShouldQueue
             foreach ($this->order->items as $item) {
                 $item->productSku->addStock($item->amount);
             }
+            if ($item->order->type === Order::TYPE_SECKILL
+                && $item->product->on_sale
+                && !$item->product->seckill->is_after_end) {
+                // 将 Redis 中的库存 +1
+                \Redis::incr('seckill_sku_'.$item->productSku->id);
+            }
             if ($this->order->couponCode) {
                 $this->order->couponCode->changeUsed(false);
             }
