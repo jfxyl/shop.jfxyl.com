@@ -14,13 +14,11 @@ class CreateSeckillProductsTable extends Migration
     public function up()
     {
         Schema::create('seckill_products', function (Blueprint $table) {
-            Schema::create('seckill_products', function (Blueprint $table) {
-                $table->increments('id');
-                $table->unsignedInteger('product_id');
-                $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-                $table->dateTime('start_at');
-                $table->dateTime('end_at');
-            });
+            $table->increments('id');
+            $table->unsignedInteger('product_id');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->dateTime('start_at');
+            $table->dateTime('end_at');
         });
     }
 
