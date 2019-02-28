@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # 导入 .env  环境变量
 source ./.env
 # 要备份的表
